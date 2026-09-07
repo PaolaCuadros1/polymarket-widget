@@ -20,8 +20,8 @@ export function BetPanel({ market, placing, error, onPlaceBet }: Props) {
 
   if (!market) {
     return (
-      <div className="bet-panel empty-state">
-        <p>Select a market to view its details and place a bet.</p>
+      <div className="mb-5 rounded-xl border border-dashed border-border p-6 text-center text-sm text-ink-soft">
+        Select a market to view its details and place a bet.
       </div>
     );
   }
@@ -36,47 +36,54 @@ export function BetPanel({ market, placing, error, onPlaceBet }: Props) {
   }
 
   return (
-    <div className="bet-panel">
-      <h2>{market.question}</h2>
-      <p className="market-meta">
+    <div className="mb-5">
+      <h2 className="text-lg font-semibold text-ink">{market.question}</h2>
+      <p className="mt-1 text-xs text-ink-soft">
         Liquidity ${market.liquidity.toLocaleString()} · Volume ${market.volume.toLocaleString()}
-        {market.closed && <span className="badge-closed"> · Market closed</span>}
+        {market.closed && <span className="font-medium text-sell"> · Market closed</span>}
       </p>
 
-      <form onSubmit={handleSubmit} className="bet-form">
-        <label>Outcome</label>
-        <div className="outcome-select">
+      <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-1.5">
+        <label className="mt-2 text-[13px] font-semibold text-ink-soft">Outcome</label>
+        <div className="flex flex-wrap gap-2">
           {market.outcomes.map((o) => (
             <button
               type="button"
               key={o.tokenId || o.name}
-              className={o.tokenId === tokenId ? "outcome-btn selected" : "outcome-btn"}
               onClick={() => setTokenId(o.tokenId)}
+              className={`rounded-lg border px-3 py-2 text-sm ${o.tokenId === tokenId
+                  ? "border-accent bg-accent-soft text-accent-ink"
+                  : "border-border bg-canvas text-ink"
+                }`}
             >
               {o.name} — {(o.price * 100).toFixed(1)}%
             </button>
           ))}
         </div>
 
-        <label>Side</label>
-        <div className="side-select">
+        <label className="mt-2 text-[13px] font-semibold text-ink-soft">Side</label>
+        <div className="flex gap-2">
           <button
             type="button"
-            className={side === "BUY" ? "side-btn buy selected" : "side-btn buy"}
             onClick={() => setSide("BUY")}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium ${side === "BUY" ? "border-buy bg-buy-soft text-buy" : "border-border bg-canvas text-ink"
+              }`}
           >
             Buy
           </button>
           <button
             type="button"
-            className={side === "SELL" ? "side-btn sell selected" : "side-btn sell"}
             onClick={() => setSide("SELL")}
+            className={`rounded-lg border px-3 py-2 text-sm font-medium ${side === "SELL" ? "border-sell bg-sell-soft text-sell" : "border-border bg-canvas text-ink"
+              }`}
           >
             Sell
           </button>
         </div>
 
-        <label htmlFor="size">Size (shares, minimum {market.minOrderSize})</label>
+        <label htmlFor="size" className="mt-2 text-[13px] font-semibold text-ink-soft">
+          Size (shares, minimum {market.minOrderSize})
+        </label>
         <input
           id="size"
           type="number"
@@ -84,15 +91,20 @@ export function BetPanel({ market, placing, error, onPlaceBet }: Props) {
           step="any"
           value={size}
           onChange={(e) => setSize(Number(e.target.value))}
+          className="rounded-lg border border-border bg-canvas px-2.5 py-2 text-[15px] text-ink focus:border-accent focus:outline-none"
         />
 
-        <p className="estimated-cost">
-          Estimated Cost: <strong>${estimatedCost.toFixed(2)}</strong>
+        <p className="mt-2 text-sm text-ink">
+          Estimated Cost: <strong className="font-semibold">${estimatedCost.toFixed(2)}</strong>
         </p>
 
-        {error && <p className="form-error">{error}</p>}
+        {error && <p className="text-[13px] text-sell">{error}</p>}
 
-        <button type="submit" className="place-bet-btn" disabled={placing || market.closed}>
+        <button
+          type="submit"
+          disabled={placing || market.closed}
+          className="mt-3 rounded-lg bg-accent px-3 py-3 text-[15px] font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+        >
           {placing ? "Placing bet..." : "Place a bet"}
         </button>
       </form>
