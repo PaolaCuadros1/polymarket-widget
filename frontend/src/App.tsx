@@ -5,7 +5,6 @@ import { BetPanel } from './components/BetPanel';
 import { BetHistory } from './components/BetHistory';
 import { fetchBets, fetchMarket, fetchMarkets, placeBet } from './api';
 import type { Bet, BetSide, Market } from './types';
-import './App.css'
 
 function App() {
   const [markets, setMarkets] = useState<Market[]>([]);
@@ -64,20 +63,20 @@ function App() {
   }
 
   return (
-    <div className="app-shell">
-      <header className="app-header">
-        <h1>Polymarket Widget</h1>
-        <p className="subtitle">
+    <div className="mx-auto flex min-h-svh w-full max-w-[1126px] flex-col border-x border-border bg-canvas px-6 pb-10 text-ink">
+      <header className="pt-8 pb-2">
+        <h1 className="text-[28px] font-semibold tracking-tight">Polymarket Widget</h1>
+        <p className="mt-1 text-[15px] text-ink-soft">
           Live market data powered by the Gamma API · Simulated trading with no real funds
         </p>
       </header>
 
-      <main className="app-main">
-        <section className="markets-column">
+      <main className="mt-4 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="rounded-xl border border-border bg-surface p-4">
           <SearchBar onSearch={loadMarkets} loading={loadingMarkets} />
-          {marketsError && <p className="form-error">{marketsError}</p>}
+          {marketsError && <p className="text-[13px] text-sell">{marketsError}</p>}
           {loadingMarkets ? (
-            <p className="empty-state">Loading markets...</p>
+            <p className="py-3 text-sm text-ink-soft">Loading markets...</p>
           ) : (
             <MarketList
               markets={markets}
@@ -87,14 +86,14 @@ function App() {
           )}
         </section>
 
-        <section className="bet-column">
+        <section className="rounded-xl border border-border bg-surface p-4">
           <BetPanel
             market={selectedMarket}
             placing={placing}
             error={betError}
             onPlaceBet={handlePlaceBet}
           />
-          <h3>Betting History</h3>
+          <h3 className="mb-2 text-lg font-semibold">Betting History</h3>
           <BetHistory bets={bets} />
         </section>
       </main>
