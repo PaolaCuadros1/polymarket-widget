@@ -47,3 +47,11 @@ export interface PlaceBetInput {
   price: number;
   size: number;
 }
+
+export interface AiRecommendation {
+  tokenId: string;
+  outcomeName: string;
+  side: BetSide;
+  confidence: number;
+  reasoning: string;
+}

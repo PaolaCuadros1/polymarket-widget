@@ -23,6 +23,14 @@ export type BetSide = 'BUY' | 'SELL';
 
 export type BetStatus = 'FILLED' | 'PENDING' | 'CANCELLED';
 
+export interface AiRecommendation {
+  tokenId: string;
+  outcomeName: string;
+  side: BetSide;
+  confidence: number;
+  reasoning: string;
+}
+
 export interface Bet {
   id: string;
   marketId: string;

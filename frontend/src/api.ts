@@ -1,4 +1,4 @@
-import type { Bet, BetSide, Market } from './types';
+import type { AiRecommendation, Bet, BetSide, Market } from './types';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:4200';
 
@@ -24,6 +24,15 @@ export async function fetchMarket(slug: string): Promise<{ market: Market }> {
 
 export async function fetchBets(): Promise<{ bets: Bet[] }> {
   const res = await fetch(`${API_BASE}/api/bets`);
+  return handleResponse(res);
+}
+
+export async function getAiRecommendation(marketSlug: string): Promise<{ recommendation: AiRecommendation }> {
+  const res = await fetch(`${API_BASE}/api/ai/recommend`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ marketSlug }),
+  });
   return handleResponse(res);
 }
 

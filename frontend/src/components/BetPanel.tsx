@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
-import type { Market, BetSide } from "../types";
+import type { Market, BetSide, AiRecommendation } from "../types";
+import { getAiRecommendation } from "../api";
 
 interface Props {
   market: Market | null;
@@ -14,9 +15,35 @@ export function BetPanel({ market, placing, error, onPlaceBet }: Props) {
   const [side, setSide] = useState<BetSide>("BUY");
   const [size, setSize] = useState(10);
 
+  const [recommendation, setRecommendation] = useState<AiRecommendation | null>(null);
+  const [askingAi, setAskingAi] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
+
   useEffect(() => {
     setTokenId(market?.outcomes[0]?.tokenId ?? "");
+    setRecommendation(null);
+    setAiError(null);
   }, [market?.slug]);
+
+  async function handleAskAi() {
+    if (!market) return;
+    setAskingAi(true);
+    setAiError(null);
+    try {
+      const res = await getAiRecommendation(market.slug);
+      setRecommendation(res.recommendation);
+    } catch (err) {
+      setAiError((err as Error).message);
+    } finally {
+      setAskingAi(false);
+    }
+  }
+
+  function useRecommendation() {
+    if (!recommendation) return;
+    setTokenId(recommendation.tokenId);
+    setSide(recommendation.side);
+  }
 
   if (!market) {
     return (
@@ -42,6 +69,38 @@ export function BetPanel({ market, placing, error, onPlaceBet }: Props) {
         Liquidity ${market.liquidity.toLocaleString()} · Volume ${market.volume.toLocaleString()}
         {market.closed && <span className="font-medium text-sell"> · Market closed</span>}
       </p>
+
+      <button
+        type="button"
+        onClick={handleAskAi}
+        disabled={askingAi}
+        className="mt-3 cursor-pointer rounded-lg border border-accent bg-accent-soft px-3 py-2 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {askingAi ? "Asking AI..." : "Ask AI for a pick"}
+      </button>
+
+      {aiError && <p className="mt-2 text-[13px] text-sell">{aiError}</p>}
+
+      {recommendation && (
+        <div className="mt-3 rounded-lg border border-accent bg-accent-soft p-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-sm font-semibold text-ink">
+              {recommendation.side} {recommendation.outcomeName}
+            </span>
+            <span className="text-xs font-semibold text-accent-ink">
+              {(recommendation.confidence * 100).toFixed(0)}% confidence
+            </span>
+          </div>
+          <p className="mt-1.5 text-[13px] text-ink-soft">{recommendation.reasoning}</p>
+          <button
+            type="button"
+            onClick={useRecommendation}
+            className="mt-2 cursor-pointer text-[13px] font-semibold text-accent-ink underline"
+          >
+            Use this pick
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-1.5">
         <label className="mt-2 text-[13px] font-semibold text-ink-soft">Outcome</label>

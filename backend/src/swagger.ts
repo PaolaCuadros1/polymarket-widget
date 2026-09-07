@@ -86,6 +86,50 @@ export const swaggerDocument = {
         },
       },
     },
+    "/ai/recommend": {
+      post: {
+        summary: "Get an AI-assisted outcome recommendation for a market",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                required: ["marketSlug"],
+                properties: { marketSlug: { type: "string" } },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Recommendation",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    recommendation: {
+                      type: "object",
+                      properties: {
+                        tokenId: { type: "string" },
+                        outcomeName: { type: "string" },
+                        side: { type: "string", enum: ["BUY", "SELL"] },
+                        confidence: { type: "number" },
+                        reasoning: { type: "string" },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          "400": { description: "Invalid input" },
+          "404": { description: "Market not found" },
+          "502": { description: "Upstream error (Gamma API or Claude)" },
+        },
+      },
+    },
     "/bets": {
       get: {
         summary: "List placed bets",
