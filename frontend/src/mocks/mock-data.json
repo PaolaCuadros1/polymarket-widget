@@ -1,0 +1,132 @@
+{
+  "markets": [
+    {
+      "id": "0x1a2b3c",
+      "slug": "will-bitcoin-hit-100k-by-end-of-2026",
+      "question": "Will Bitcoin hit $100k by end of 2026?",
+      "category": "Crypto",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/bitcoin-100k.png",
+      "endDate": "2026-12-31T23:59:59Z",
+      "volume": 1284392.55,
+      "liquidity": 92310.12,
+      "active": true,
+      "closed": false,
+      "minOrderSize": 5,
+      "outcomes": [
+        { "tokenId": "10001", "name": "Yes", "price": 0.63 },
+        { "tokenId": "10002", "name": "No", "price": 0.37 }
+      ]
+    },
+    {
+      "id": "0x4d5e6f",
+      "slug": "us-presidential-election-winner-2028",
+      "question": "Who will win the 2028 US Presidential Election?",
+      "category": "Politics",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/us-election-2028.png",
+      "endDate": "2028-11-07T23:59:59Z",
+      "volume": 5432110.0,
+      "liquidity": 210044.87,
+      "active": true,
+      "closed": false,
+      "minOrderSize": 5,
+      "outcomes": [
+        { "tokenId": "20001", "name": "Democratic Candidate", "price": 0.48 },
+        { "tokenId": "20002", "name": "Republican Candidate", "price": 0.5 },
+        { "tokenId": "20003", "name": "Other", "price": 0.02 }
+      ]
+    },
+    {
+      "id": "0x7g8h9i",
+      "slug": "champions-league-winner-2026",
+      "question": "Who will win the 2025-26 UEFA Champions League?",
+      "category": "Sports",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/ucl-2026.png",
+      "endDate": "2026-05-30T21:00:00Z",
+      "volume": 342981.4,
+      "liquidity": 45120.9,
+      "active": true,
+      "closed": false,
+      "minOrderSize": 1,
+      "outcomes": [
+        { "tokenId": "30001", "name": "Real Madrid", "price": 0.22 },
+        { "tokenId": "30002", "name": "Manchester City", "price": 0.19 },
+        { "tokenId": "30003", "name": "Field", "price": 0.59 }
+      ]
+    },
+    {
+      "id": "0xj1k2l3",
+      "slug": "openai-releases-new-flagship-model-q4-2026",
+      "question": "Will OpenAI release a new flagship model in Q4 2026?",
+      "category": "Tech",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/openai-model.png",
+      "endDate": "2026-12-31T23:59:59Z",
+      "volume": 98213.75,
+      "liquidity": 12044.33,
+      "active": true,
+      "closed": false,
+      "minOrderSize": 5,
+      "outcomes": [
+        { "tokenId": "40001", "name": "Yes", "price": 0.81 },
+        { "tokenId": "40002", "name": "No", "price": 0.19 }
+      ]
+    },
+    {
+      "id": "0xm4n5o6",
+      "slug": "fed-cuts-rates-in-september-2026",
+      "question": "Will the Fed cut rates at the September 2026 meeting?",
+      "category": "Economics",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/fed-rates.png",
+      "endDate": "2026-09-18T18:00:00Z",
+      "volume": 673420.2,
+      "liquidity": 58312.6,
+      "active": false,
+      "closed": true,
+      "minOrderSize": 5,
+      "outcomes": [
+        { "tokenId": "50001", "name": "Yes", "price": 0.92 },
+        { "tokenId": "50002", "name": "No", "price": 0.08 }
+      ]
+    }
+  ],
+  "bets": [
+    {
+      "id": "bet-001",
+      "marketSlug": "will-bitcoin-hit-100k-by-end-of-2026",
+      "tokenId": "10001",
+      "question": "Will Bitcoin hit $100k by end of 2026?",
+      "outcomeName": "Yes",
+      "side": "BUY",
+      "size": 25,
+      "price": 0.63,
+      "cost": 15.75,
+      "status": "FILLED",
+      "createdAt": "2026-09-01T14:32:00Z"
+    },
+    {
+      "id": "bet-002",
+      "marketSlug": "champions-league-winner-2026",
+      "tokenId": "30003",
+      "question": "Who will win the 2025-26 UEFA Champions League?",
+      "outcomeName": "Field",
+      "side": "BUY",
+      "size": 10,
+      "price": 0.59,
+      "cost": 5.9,
+      "status": "FILLED",
+      "createdAt": "2026-09-03T09:10:00Z"
+    },
+    {
+      "id": "bet-003",
+      "marketSlug": "openai-releases-new-flagship-model-q4-2026",
+      "tokenId": "40002",
+      "question": "Will OpenAI release a new flagship model in Q4 2026?",
+      "outcomeName": "No",
+      "side": "SELL",
+      "size": 15,
+      "price": 0.19,
+      "cost": 2.85,
+      "status": "FILLED",
+      "createdAt": "2026-09-05T18:45:00Z"
+    }
+  ]
+}
