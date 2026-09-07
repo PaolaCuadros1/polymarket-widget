@@ -25,6 +25,7 @@ export type BetStatus = 'FILLED' | 'PENDING' | 'CANCELLED';
 
 export interface Bet {
   id: string;
+  marketId: string;
   marketSlug: string;
   tokenId: string;
   question: string;

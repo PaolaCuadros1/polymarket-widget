@@ -1,37 +1,30 @@
-import mockData from './mocks/mock-data.json';
 import type { Bet, BetSide, Market } from './types';
 
-const MOCK_DELAY_MS = 300;
+const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:4200';
 
-const markets = mockData.markets as Market[];
-const bets = [...mockData.bets] as Bet[];
-
-function delay<T>(value: T): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(value), MOCK_DELAY_MS));
+async function handleResponse<T>(res: Response): Promise<T> {
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error ?? `Request failed: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
 }
 
 export async function fetchMarkets(query: string): Promise<{ markets: Market[] }> {
-  const term = query.trim().toLowerCase();
-  const filtered = term
-    ? markets.filter(
-        (market) =>
-          market.question.toLowerCase().includes(term) ||
-          market.category.toLowerCase().includes(term)
-      )
-    : markets;
-  return delay({ markets: filtered });
+  const url = new URL(`${API_BASE}/api/markets`);
+  if (query.trim()) url.searchParams.set('q', query.trim());
+  const res = await fetch(url.toString());
+  return handleResponse(res);
 }
 
 export async function fetchMarket(slug: string): Promise<{ market: Market }> {
-  const market = markets.find((m) => m.slug === slug);
-  if (!market) {
-    throw new Error(`Market not found: ${slug}`);
-  }
-  return delay({ market });
+  const res = await fetch(`${API_BASE}/api/markets/${encodeURIComponent(slug)}`);
+  return handleResponse(res);
 }
 
 export async function fetchBets(): Promise<{ bets: Bet[] }> {
-  return delay({ bets });
+  const res = await fetch(`${API_BASE}/api/bets`);
+  return handleResponse(res);
 }
 
 export async function placeBet(params: {
@@ -40,25 +33,10 @@ export async function placeBet(params: {
   side: BetSide;
   size: number;
 }): Promise<{ bet: Bet }> {
-  const market = markets.find((m) => m.slug === params.marketSlug);
-  const outcome = market?.outcomes.find((o) => o.tokenId === params.tokenId);
-  if (!market || !outcome) {
-    throw new Error('Invalid market or token');
-  }
-
-  const bet: Bet = {
-    id: `bet-${Date.now()}`,
-    marketSlug: params.marketSlug,
-    tokenId: params.tokenId,
-    question: market.question,
-    outcomeName: outcome.name,
-    side: params.side,
-    size: params.size,
-    price: outcome.price,
-    cost: outcome.price * params.size,
-    status: 'FILLED',
-    createdAt: new Date().toISOString(),
-  };
-  bets.unshift(bet);
-  return delay({ bet });
+  const res = await fetch(`${API_BASE}/api/bets`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
+  });
+  return handleResponse(res);
 }
